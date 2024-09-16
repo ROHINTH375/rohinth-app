@@ -1,23 +1,38 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState } from 'react';
+import CartModal from './components/CartModal';
+// import ProductCard from './components/ProductCard';
+import ProductList from './components/ProductList';
+import Navbar from './components/Navbar';
 
 function App() {
+  const [cartItems, setCartItems] = useState([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  const addToCart = (product) => {
+    setCartItems([...cartItems, product])
+  }
+
+  const removeFromCart = (id) => {
+    setCartItems(cartItems.filter((item) => item.id !== id));
+
+  }
+
+  const openCart = () => setIsCartOpen(true);
+  const closeCart = () => setIsCartOpen(false);
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Navbar cartCount = {cartItems.length} openCart = {openCart} />
+      <ProductList addToCart={addToCart} cartItems={cartItems} />
+      {/* <ProductCard /> */}
+      
+
+      {isCartOpen && 
+      <CartModal cartItems={cartItems}
+      removeFromCart={removeFromCart}
+      closeModal={closeCart} /> } 
     </div>
   );
 }
